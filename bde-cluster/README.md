@@ -1,10 +1,10 @@
-####Struktura projekta
+## Struktura projekta
 
-Projekat predstavlja aplikaciju napisanu u programskom jeziku Python, koja analizira podatke o letovima širom Amerike. Aplikacija se izvršava na klasteru Docker kontejnera koji se pokreću na osnovu image-aLINK datih od strane BDE Europe.
-Struktura projekta se može videti u nastavku. U folderu app nalazi se aplikacija sa svojim docker fajlom, potrebnim komponentama za instalaciju i shell skriptom za njeno pokretanje.
-Folder infrastructure definiše infrastrukturu klastera i u njemu se nalazi folder data, iz koga se učitavaju podaci (feds.csv), spakovan pri postavljanju u arhivu zbog svoje veličine.
-Skripte za pokretanje, zaustavljanje i postavljanje podataka na HDFS se takođe nalaze u folderu infrastructure, kao i docker-compose.yml i hadoop.env, koji određuju izgled klastera i njegove servise.
-Potrebne zavisnosti se nalaze u datotekama dependencies.txt i build_dependencies.txt. Datoteka docker-compose.yml u okviru direktorijuma bde-cluster služi za definisanje submit kontejnera i image-a. 
+Projekat predstavlja aplikaciju napisanu u programskom jeziku Python, koja analizira podatke o letovima širom Amerike. Aplikacija se izvršava na klasteru Docker kontejnera koji se pokreću na osnovu [image-a datih od strane BDE Europe](https://github.com/big-data-europe/docker-spark).
+Struktura projekta se može videti u nastavku. U folderu `app` nalazi se aplikacija sa svojim docker fajlom, potrebnim komponentama za instalaciju i shell skriptom za njeno pokretanje.
+Folder `infrastructure` definiše infrastrukturu klastera i u njemu se nalazi folder `data`, iz koga se učitavaju podaci (`feds.csv`), spakovan pri postavljanju u arhivu zbog svoje veličine.
+Skripte za pokretanje, zaustavljanje i postavljanje podataka na HDFS se takođe nalaze u folderu `infrastructure`, kao i `docker-compose.yml` i `hadoop.env`, koji određuju izgled klastera i njegove servise.
+Potrebne zavisnosti se nalaze u datotekama `dependencies.txt` i `build_dependencies.txt`. Datoteka `docker-compose.yml` u okviru direktorijuma `bde-cluster` služi za definisanje submit kontejnera i image-a. 
 U ovom direktorijumu se nalaze i skripte za pokretanje i zaustavljanje analize.
 
 ```bash
@@ -30,17 +30,17 @@ bde-cluster/
  |stop_all.sh
 ```
 
-####Korišćeni skup podataka
+## Korišćeni skup podataka
 
-Podaci nad kojima treba izvršiti analizu preuzeti su sa lokacije https://github.com/BuzzFeedNews/2016-04-federal-surveillance-planes/tree/master/data/feds i spojeni u fajl feds.csv, sa više od 120000 stavki. 
-Ove stavke predstavljaju podatke prikupljene o praćenim letelicama u Americi u periodu od 4 meseca, pri čemu je ovdeLINKhttps://buzzfeednews.github.io/2016-04-federal-surveillance-planes/analysis.html objašnjeno koja su značenja različitih tipova podataka koji su prisutni.
+Podaci nad kojima treba izvršiti analizu preuzeti su sa [ove lokacije](https://github.com/BuzzFeedNews/2016-04-federal-surveillance-planes/tree/master/data/feds) i spojeni u fajl `feds.csv`, sa više od 120000 stavki. 
+Ove stavke predstavljaju podatke prikupljene o praćenim letelicama u Americi u periodu od 4 meseca, pri čemu je [ovde](https://buzzfeednews.github.io/2016-04-federal-surveillance-planes/analysis.html) objašnjeno koja su značenja različitih tipova podataka koji su prisutni.
 Prvu vrstu dokumenta čine nazivi odgovarajućih podataka, a ostale njihove vrednosti. 
 
-#### Infrastruktura
+## Infrastruktura
 
-Aplikacija se izvršava na lokalnom klasteru Docker kontejnera, koji koriste """bde-spark image-e""".
-Infrastruktura je opisana preko docker-compose.yml i sadrži Hadoop servise, kao sto su `namenode`, `datanote` i `resourcemanager`, i Spark servise -- pyspark-master i dva worker čvora:
-Definisana je i mreža bde, na kojoj se svi kontejneri nalaze.
+Aplikacija se izvršava na lokalnom klasteru Docker kontejnera, koji koriste `bde-spark image-e`.
+Infrastruktura je opisana preko `docker-compose.yml` i sadrži Hadoop servise, kao sto su `namenode`, `datanote` i `resourcemanager`, i Spark servise – `pyspark-master` i dva worker čvora:
+Definisana je i mreža `bde`, na kojoj se svi kontejneri nalaze.
 
 ```yaml
 services:
@@ -88,11 +88,11 @@ networks:
       name: bde
 ```
 
-#### "Submit" kontejner
+## "Submit" kontejner
 
 Image pod nazivom `bde2020/spark-submit`, u kontejneru kome se dodeljuje sličan naziv, služi za slanje Python aplikacije na izvršenje na klasteru. 
-Ovaj image i kontejner se definišu u docker-compose.yml fajlu bde-cluster direktorijuma. Definišu se i ime i port mastera, mreža na kojoj se ovaj kontejner nalazi (isto bde)
-i lokacija nad kojom se vrši build (./app/). Takođe, potrebno je obezbediti korišćene zavisnosti u fajlovima build_dependencies.txt i dependencies.txt (kao što je Python verzija). 
+Ovaj image i kontejner se definišu u `docker-compose.yml` fajlu `bde-cluster` direktorijuma. Definišu se i ime i port mastera, mreža na kojoj se ovaj kontejner nalazi (isto `bde`)
+i lokacija nad kojom se vrši build (`./app/`). Takođe, potrebno je obezbediti korišćene zavisnosti u fajlovima `build_dependencies.txt` i `dependencies.txt` (kao što je Python verzija). 
 
 ```
 version: "3"
@@ -113,20 +113,20 @@ networks:
       name: bde
 ```
 
-#### Pokretanje infrastrukture i "submit" kontejnera
+## Pokretanje infrastrukture i "submit" kontejnera
  
-Najpre treba kreirati zajedničku mrežu za klaster, bde, a zatim pokrenuti definisanu infrastrukturu i postaviti feds.csv na HDFS (infra_start.sh).
-Infrastruktura se može stopirati preko skripte infra_stop.sh. Nakon pokretanja infrastrukture, treba pokrenuti i prethodno pomenuti submit kontejner. 
-Ovo se vrši preko analysis_start.sh, a takođe se poziva i spark-submit komanda i spark-master čvoru šalje Python aplikacija na izvršenje. 
+Najpre treba kreirati zajedničku mrežu za klaster (`bde`), a zatim pokrenuti definisanu infrastrukturu i postaviti `feds.csv` na HDFS (`infra_start.sh`).
+Infrastruktura se može stopirati preko skripte `infra_stop.sh`. Nakon pokretanja infrastrukture, treba pokrenuti i prethodno pomenuti submit kontejner. 
+Ovo se vrši preko `analysis_start.sh`, a takođe se poziva i `spark-submit` komanda i `spark-master` čvoru šalje Python aplikacija na izvršenje. 
 U nastavku su date akcije koje odgovaraju prethodnom opisu.
 
 * `$ docker network create bde`
 * `$ cd infrastructure && ./infra_start.sh && ./infra_upload_to_hdfs.sh`
 * `$ cd .. && ./analysis_start.sh`
 
-Dockerfile određuje lokaciju aplikacije kao `/app/app.py` i vrednosti promenljivih okruženja, koje će se koristiti u šablonu, datom na LINK. 
+Dockerfile određuje lokaciju aplikacije kao `/app/app.py` i vrednosti promenljivih okruženja, koje će se koristiti u šablonu, datom na [ovoj adresi](). 
 Pošto je u pitanju lokalni klaster, broj jezgara za izvršenje je postavljen na broj dostupnih, 1. Nakon postavljanja potrebnih promenljivih,
-poziva se bash i u njemu izvršava datoteka start.sh (koja poziva pomenuti šablon).
+poziva se bash i u njemu izvršava datoteka `start.sh` (koja poziva pomenuti šablon).
 
 https://github.com/big-data-europe/docker-spark/blob/master/submit/submit.sh#L11
 
@@ -156,15 +156,14 @@ RUN chmod +x /start.sh
 CMD ["/bin/bash", "/start.sh"]
 ```
 
-#### Aplikacija
+## Aplikacija
 
-Aplikacija je napisana u programskom jeziku Python. Najpre treba ubaciti sve potrebne zavisnosti (uglavnom iz biblioteke pyspark za rad sa Spark-om).
- Zatim se poziva main funkcija, gde se kreira Spark sesija i šema, koja definiše naziv i tip podataka, na osnovu koje će se oni čitati. 
- Podaci se iz HDFS-a čitaju tako što se navede format datoteke koja se čita -- csv, da li je prva linija datoteke header, zatim koji karakter razdvaja podatke (;). 
+Aplikacija je napisana u programskom jeziku Python. Najpre treba ubaciti sve potrebne zavisnosti (uglavnom iz biblioteke `pyspark` za rad sa Spark-om). Zatim se poziva main funkcija, gde se kreira Spark sesija i šema, koja definiše naziv i tip podataka, na osnovu koje će se oni čitati. 
+ Podaci se iz HDFS-a čitaju tako što se navede format datoteke koja se čita – `csv`, da li je prva linija datoteke header, zatim koji karakter razdvaja podatke (`;`). 
  Takođe se navodi prethodno definisana šema i lokacija na kojoj se fajl nalazi. 
- Opcija timestampFormat određuje format u kome je podatak koji se tumači kao TimestampType napisan u datoteci. 
- Podaci se smeštaju u data frame, pyspark jedinicu podataka koja sliči tabeli. Argumenti na osnovu kojih se vrši filtriranje i izračunavanje 
+ Opcija `timestampFormat` određuje format u kome je podatak koji se tumači kao `TimestampType` napisan u datoteci. 
+ Podaci se smeštaju u data frame, `pyspark` jedinicu podataka koja sliči tabeli. Argumenti na osnovu kojih se vrši filtriranje i izračunavanje 
  su dati preko promenljivih okruženja i njihove vrednosti se učitavaju u određene promenljive. 
- Dobijeni data frame se filtrira po vremenskoj i lokacijskoj osnovi, kao i po vrednosti specificiranog atributa, preko funkcije filter. 
- Zatim se preko funkcije groupBy kreira tabela u kojoj se u jednoj koloni nalaze distinktne vrednosti zadatog atributa, a u drugoj brojevi njihovog pojavljivanja. 
- Na kraju se preko sql funkcija računaju minimum i maksimum odgovarajuće kolone i prikazuju, kao i njena prosečna vrednost i standardna devijacija.
+ Dobijeni data frame se filtrira po vremenskoj i lokacijskoj osnovi, kao i po vrednosti specificiranog atributa, preko funkcije `filter`. 
+ Zatim se preko funkcije `groupBy` kreira data frame, gde se u jednoj koloni nalaze distinktne vrednosti zadatog atributa, a u drugoj brojevi njihovog pojavljivanja. 
+ Na kraju se preko `sql` funkcija računaju minimum i maksimum odgovarajuće kolone i prikazuju, kao i njena prosečna vrednost i standardna devijacija.
