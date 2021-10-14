@@ -124,11 +124,9 @@ U nastavku su date akcije koje odgovaraju prethodnom opisu.
 * `$ cd infrastructure && ./infra_start.sh && ./infra_upload_to_hdfs.sh`
 * `$ cd .. && ./analysis_start.sh`
 
-Dockerfile određuje lokaciju aplikacije kao `/app/app.py` i vrednosti promenljivih okruženja, koje će se koristiti u šablonu, datom na [ovoj adresi](). 
+Dockerfile određuje lokaciju aplikacije kao `/app/app.py` i vrednosti promenljivih okruženja, koje će se koristiti u šablonu, datom na [ovoj adresi](https://github.com/big-data-europe/docker-spark/blob/master/submit/submit.sh#L11). 
 Pošto je u pitanju lokalni klaster, broj jezgara za izvršenje je postavljen na broj dostupnih, 1. Nakon postavljanja potrebnih promenljivih,
 poziva se bash i u njemu izvršava datoteka `start.sh` (koja poziva pomenuti šablon).
-
-https://github.com/big-data-europe/docker-spark/blob/master/submit/submit.sh#L11
 
 ```FROM bde2020/spark-python-template:3.1.1-hadoop3.2
 
