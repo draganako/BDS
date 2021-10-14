@@ -1,0 +1,24 @@
+FROM bde2020/spark-python-template:3.1.1-hadoop3.2
+
+ENV SPARK_MASTER spark://pyspark-master:7067
+ENV SPARK_APPLICATION_PYTHON_LOCATION app/app.py
+ENV SPARK_SUBMIT_ARGS "--total-executor-cores 1 --executor-cores 1 --conf spark.dynamicAllocation.enabled=false"
+ENV SPARK_APP_ARG_DATE_FROM 2015-08-18T07:01:39Z
+ENV SPARK_APP_ARG_DATE_TO 2015-08-18T07:58:39Z 
+ENV SPARK_APP_ARG_LAT 33
+ENV SPARK_APP_ARG_LON -118
+ENV SPARK_APP_ARG_LAT_PRECISION 2
+ENV SPARK_APP_ARG_LON_PRECISION 2
+ENV SPARK_APP_ARG_ATTR_NAME "altitude"
+ENV SPARK_APP_ARG_ATTR_VALUE 5500
+ENV SPARK_APP_ARG_ATTR_TO_SHOW "speed"
+
+ENV HDFS_ROOT hdfs://namenode:9000
+ENV HDFS_DATASET_PATH /data/
+EXPOSE 7067 9000
+  
+ADD start.sh /
+
+RUN chmod +x /start.sh
+
+CMD ["/bin/bash", "/start.sh"]

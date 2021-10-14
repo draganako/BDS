@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  submit:
+    build: ./app/
+    image: spark-submit:3.1.1-hadoop3.2
+    container_name: analysis
+    environment:
+      SPARK_MASTER_NAME: pyspark-master
+      SPARK_MASTER_PORT: 7067
+      ENABLE_INIT_DAEMON: "false"
+
+networks:
+  default:
+    external:
+      name: bde
+
+               
